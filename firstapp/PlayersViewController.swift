@@ -41,16 +41,18 @@ class PlayersViewController: UITableViewController {
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("PlayerCell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("PlayerCell", forIndexPath: indexPath) as! PlayerCell
         
         let player = players[indexPath.row] as Player
+        cell.player = player
+        /*
         cell.textLabel?.text = player.name
-        cell.detailTextLabel?.text = player.game
+        cell.detailTextLabel?.text = player.game*/
         // Configure the cell...
 
         return cell
     }
-    
+  
 
     /*
     // Override to support conditional editing of the table view.
