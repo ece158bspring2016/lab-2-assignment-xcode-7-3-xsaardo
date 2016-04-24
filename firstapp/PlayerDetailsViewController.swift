@@ -1,16 +1,30 @@
 //
-//  PlayersViewController.swift
+//  PlayerDetailsViewController.swift
 //  firstapp
 //
-//  Created by Cuong Luong on 4/18/16.
+//  Created by Cuong Luong on 4/21/16.
 //  Copyright © 2016 Cuong Luong. All rights reserved.
 //
 
 import UIKit
 
-class PlayersViewController: UITableViewController {
+class PlayerDetailsViewController: UITableViewController {
+    var player: Player?
+    @IBOutlet weak var detailLabel: UILabel!
+    @IBOutlet weak var nameTextField: UITextField!
     
-    var players:[Player] = playersData
+    var game:String = "Chess" {
+        didSet {
+            detailLabel.text? = game
+        }
+    }
+    
+    @IBAction func unwindWithSelectedGame(segue:UIStoryboardSegue) {
+        if let GamePickerViewController = segue.sourceViewController as? GamePickerViewController,
+            selectedGame = GamePickerViewController.selectedGame {
+            game = selectedGame
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,7 +36,12 @@ class PlayersViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
-   
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if indexPath.section == 0 {
+            nameTextField.becomeFirstResponder()
+            print("Hi")
+        }
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -30,45 +49,26 @@ class PlayersViewController: UITableViewController {
     }
 
     // MARK: - Table view data source
-
+    /*
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 1
+        return 0
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return players.count
-    }
+        return 0
+    }*/
 
-    
+    /*
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("PlayerCell", forIndexPath: indexPath) as! PlayerCell
-        
-        let player = players[indexPath.row] as Player
-        cell.player = player
-        /*
-        cell.textLabel?.text = player.name
-        cell.detailTextLabel?.text = player.game*/
+        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
+
         // Configure the cell...
 
         return cell
     }
-    
-    @IBAction func cancelToPlayersViewController(segue:UIStoryboardSegue) {
-        
-    }
-    
-    @IBAction func savePlayerDetail(segue: UIStoryboardSegue) {
-        if let PlayerDetailsViewController = segue.sourceViewController as? PlayerDetailsViewController {
-            if let player = PlayerDetailsViewController.player{
-                players.append(player)
-                let indexPath = NSIndexPath(forRow: players.count-1, inSection: 0)
-                tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-            }
-        }
-        print("hi")
-    }
+    */
 
     /*
     // Override to support conditional editing of the table view.
@@ -105,14 +105,17 @@ class PlayersViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
+        // Get the new view controller using segue.destinationViewer.
         // Pass the selected object to the new view controller.
+        if segue.identifier == "SavePlayerDetail" {
+            player = Player(name: nameTextField.text, game: game, rating: 1)
+        }
     }
-    */
+    
 
 }
